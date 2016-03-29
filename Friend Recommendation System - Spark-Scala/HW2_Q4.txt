@@ -1,0 +1,41 @@
+	import java.sql.Date
+import java.text.SimpleDateFormat
+import org.apache.spark.sql.SQLContext
+
+val Date = new Date(System.currentTimeMillis)
+def age(dob: String) ={
+    val date=dob.split("/")
+     val Month = Date.getMonth()+1
+     val Year = Date.getYear()+1900
+     var age = Year - date(2).toInt
+     if(date(0).toInt>Month)
+     {
+     age-= 1
+     }
+     else if(date(0).toInt==Month){
+     val currentDay=Date.getDate();
+     if(date(1).toInt>currentDay)
+     {
+     age-= 1
+     }
+     }
+     age.toFloat
+}
+
+val input = sc.textFile("hdfs://cshadoop1/socNetData/networkdata")
+val friends = input.map(li=>li.split("\\t")).filter(l1 => (l1.size == 2)).map(li=>(li(0),li(1).split(","))).flatMap(x=>x._2.flatMap(z=>Array((z,x._1))))
+val input2 = sc.textFile("hdfs://cshadoop1/socNetData/userdata")
+val value1 = input2.map(li=>li.split(",")).map(li=>(li(0),age(li(9))))
+val value2 = friends.join(value1)
+
+def mean1(Sum_Age: Iterable[Float]) = Sum_Age.sum / Sum_Age.size
+
+val Average_Age = value2.groupBy(_._2._1).mapValues(Sum_Age=>mean1(Sum_Age.map(_._2._2))).toArray
+val Sorted_Age = Average_Age.sortBy(_._2).reverse
+val Final_20 = Sorted_Age.take(20)
+val Final_20sc = sc.parallelize(Final_20)
+val value3 = input2.map(li=>li.split(",")).map(li=>(li(0),li(1),li(3),li(4),li(5)))
+val key = value3.map({case(first,second,third,fourth,fifth) => first->(second,third,fourth,fifth)})
+val Join = Final_20sc.join(key).sortBy(_._2,false)
+val answer = Join.map(x=>(x._2._2._1,x._2._2._2,x._2._2._3,x._2._2._4,x._2._1)).collect.mkString("\n").replace("(","").replace(")","")
+

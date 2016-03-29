@@ -1,0 +1,20 @@
+def Friends_Sort(friends: List[(Int, Int)]) : List[Int]   = {
+
+friends.sortBy(allPair => (-allPair._2, allPair._1)).map(allPair => allPair._1)
+
+}
+
+
+val List_Friends=sc.textFile("hdfs://cshadoop1/socNetData/networkdata").cache()
+
+val Friends_Pair = List_Friends.map(line=>line.split("\\t")).filter(line => (line.size == 2)).map(line=>(line(0),line(1).split(","))).flatMap(x=>x._2.flatMap(z=>Array((x._1.toInt,z.toInt))))
+
+val Self_Join = Friends_Pair.join(Friends_Pair)
+
+val Friends_All = Self_Join.map(elem => elem._2).filter(elem => elem._1 != elem._2)
+
+val Mutual_Frnd = Friends_All.subtract(Friends_Pair)
+
+val Pair_Frnd = Mutual_Frnd.map(MutualFrnd_Pair => (MutualFrnd_Pair, 1))
+
+val Recommendation = Pair_Frnd.reduceByKey((a, b) => a + b).map(elem => (elem._1._1, (elem._1._2, elem._2))).groupByKey().map(triplet => (triplet._1, Friends_Sort(triplet._2.toList))).map(triplet => triplet._1.toString + "\t" + triplet._2.map(x=>x.toString).toArray.mkString(",")).collect.mkString(",")
