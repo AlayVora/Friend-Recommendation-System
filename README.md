@@ -4,8 +4,8 @@
 
 ###Input: Input files
 1. soc-LiveJournal1Adj.txt located in /socNetData/networkdata in hdfs on cs6360 cluster  
-+ The input contains the adjacency list and has multiple lines in the following format:  
-+ (User)(TAB)(Friends)  
+ + The input contains the adjacency list and has multiple lines in the following format:  
+ + (User)(TAB)(Friends)  
 2. userdata.txt located in /socNetData/userdata in hdfs on cs6360 cluster. The userdata.txt contains dummy data which consist of  
 
 + column1 : userid
