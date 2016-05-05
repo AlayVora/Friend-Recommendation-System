@@ -2,13 +2,12 @@
 
 ##In this homework, we used hadoop/mapreduce to analyze social network data.
 
-Q1 - Write a MapReduce program in Hadoop that implements a simple “People You Might Know" social network friendship recommendation algorithm. The key idea is that if two people have a lot of mutual friends, then the system should recommend that they connect with each other.  
+##Q1 - Write a MapReduce program in Hadoop that implements a simple “People You Might Know" social network friendship recommendation algorithm. The key idea is that if two people have a lot of mutual friends, then the system should recommend that they connect with each other.  
 
 Input: Input files
 1. soc-LiveJournal1Adj.txt located in /socNetData/networkdata in hdfs on cs6360 cluster  
-The input contains the adjacency list and has multiple lines in the following format:  
-(User)(TAB)(Friends)  
-
+--- The input contains the adjacency list and has multiple lines in the following format:  
+--- (User)(TAB)(Friends)  
 2. userdata.txt located in /socNetData/userdata in hdfs on cs6360 cluster. The userdata.txt contains dummy data which consist of  
 
 + column1 : userid
@@ -33,11 +32,11 @@ where (User) is a unique ID corresponding to a user and <Recommendations> is a c
 (ii) Include in your writeup the recommendations for the users with following user IDs:    
 924, 8941, 8942, 9019, 9020, 9021, 9022, 9990, 9992, 9993.    
 
-Q2 - Please answer this question by using dataset from Q1. Given any two Users as input, output the list of the user id of their mutual friends.   
+##Q2 - Please answer this question by using dataset from Q1. Given any two Users as input, output the list of the user id of their mutual friends.   
 ###Output format:    
 UserA, UserB list userid of their mutual Friends.  
 
-Q3 - Please use map side join to answer this question.   
+##Q3 - Please use map side join to answer this question.   
 Given any two Users as input, output the list of the names and the zipcode of their mutual friends.
 Note: use the userdata.txt to get the extra user information.  
 ###Output format:  
@@ -45,7 +44,7 @@ UserA id, UserB id, list of [names:zipcodes] of their mutual Friends.
 ###Sample Output:  
 1234 4312 [John:75075, Jane : 75252, Ted:45045]
 
-Q4 - Using reduce-side join and job chaining:  
+##Q4 - Using reduce-side join and job chaining:  
 Step 1: Calculate the average age of the direct friends of each user.  
 Step 2: Sort the users by the calculated average age from step 1 in descending order.  
 Step 3. Output the top 20 users from step 2 with their address and the calculated average age.  
